@@ -1,5 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const fs = require('fs');
 
 const url = 'https://www.ruptela.ua/novini/';
 // const url = 'https://news.ycombinator.com/';
@@ -33,9 +34,13 @@ let getData = (html) => {
       title: $(elem).find('.name').text().replace(/\t/g, '').replace(/\n/g, ''),
       new: $(elem).find('.excerpt').text(),
       img: $(elem).find('.wp-post-image').attr('src'),
+      link: $(elem).find('a').attr('href'),
       // link: $(elem).find('a.storylink').attr('href'),
     });
   });
 
-  console.log(data);
+  fs.writeFile('testFile.json', JSON.stringify(data), (err) => {
+    if (err) throw err;
+    console.log('Data has been added!');
+  });
 };
