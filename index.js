@@ -27,19 +27,19 @@ axios
   .catch((error) => console.log(error));
 
 let getData = (html) => {
-  data = [];
+  data = {};
   const $ = cheerio.load(html);
   $('.news-item-wrap').each((i, elem) => {
-    data.push({
+    data[i] = {
       title: $(elem).find('.name').text().replace(/\t/g, '').replace(/\n/g, ''),
       new: $(elem).find('.excerpt').text(),
-      img: $(elem).find('.wp-post-image').attr('src'),
+      img: $(elem).find('.wp-post-image').attr('data-src'),
       link: $(elem).find('a').attr('href'),
       // link: $(elem).find('a.storylink').attr('href'),
-    });
+    };
   });
 
-  fs.writeFile('testFile.json', JSON.stringify(data), (err) => {
+  fs.writeFile('news.js', `export default ${JSON.stringify(data)}`, (err) => {
     if (err) throw err;
     console.log('Data has been added!');
   });
